@@ -3,6 +3,7 @@ import { DocentesService } from './docentes.service';
 import { Docente } from './schemas/docentes.schema';
 import { CreateDocentesDto} from './dto/create-docentes.dto';
 import { UpdateDocentesDto } from './dto/update-docentes.dto';
+import {UpdatePartialDocentesDto} from './dto/update-partial-docentes.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('docentes')
@@ -41,17 +42,17 @@ export class DocentesController {
   @ApiBody({ type: UpdateDocentesDto })
   @ApiResponse({ status: 200, description: 'Docente actualizado correctamente' })
   @ApiResponse({ status: 404, description: 'Docente no encontrado' })
-  update(@Param('id') id: string, @Body() updateDocenteDto: UpdateDocentesDto): Promise<Docente> {
-    return this.docentesService.update(id, updateDocenteDto);
+  update(@Param('id') id: string, @Body() updatePartialDocenteDto: UpdateDocentesDto): Promise<Docente> {
+    return this.docentesService.update(id, updatePartialDocenteDto);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar parcialmente un docente por ID' })
   @ApiParam({ name: 'id', description: 'ID del docente' })
-  @ApiBody({ type: UpdateDocentesDto })
+  @ApiBody({ type: UpdatePartialDocentesDto })
   @ApiResponse({ status: 200, description: 'Docente actualizado parcialmente' })
   @ApiResponse({ status: 404, description: 'Docente no encontrado' })
-  partialUpdate(@Param('id') id: string, @Body() updateDocenteDto: UpdateDocentesDto): Promise<Docente> {
+  partialUpdate(@Param('id') id: string, @Body() updateDocenteDto: UpdatePartialDocentesDto): Promise<Docente> {
     return this.docentesService.update(id, updateDocenteDto);
   }
 
