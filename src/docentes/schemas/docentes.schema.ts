@@ -12,5 +12,5 @@ export class Docente extends Document {
   @Prop({ required: true })
   especialidad: string;
 }
-
+ 
 export const DocentesSchema = SchemaFactory.createForClass(Docente);

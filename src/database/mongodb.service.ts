@@ -1,37 +1,20 @@
+// src/database/mongoose-events.service.ts
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import mongoose from 'mongoose';
 
 @Injectable()
-export class MongoDBService implements OnModuleInit {
-  private client: MongoClient;
-
-  constructor() {
-    // Validar que la URI existe
-    if (!process.env.MONGODB_URI) {
-      throw new Error('❌ MONGODB_URI no está definida en .env');
-    }
-    
-    this.client = new MongoClient(process.env.MONGODB_URI, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      },
+export class MongooseEventsService implements OnModuleInit {
+  onModuleInit() {
+    mongoose.connection.on('connected', () => {
+      console.log('✅ MongoDB Connected via Mongoose!');
     });
-  }
 
-  async onModuleInit() {
-    try {
-      await this.client.connect();
-      await this.client.db('admin').command({ ping: 1 });
-      console.log('✅ MongoDB Connected!');
-    } catch (error) {
-      console.error('❌ MongoDB Connection Error:', error);
-      process.exit(1);
-    }
-  }
+    mongoose.connection.on('error', (err) => {
+      console.error('❌ MongoDB Connection Error via Mongoose:', err);
+    });
 
-  getDatabase() {
-    return this.client.db('RedOpsDB');
+    mongoose.connection.on('disconnected', () => {
+      console.warn('⚠️ MongoDB Disconnected!');
+    });
   }
 }
