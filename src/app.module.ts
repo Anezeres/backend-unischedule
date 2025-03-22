@@ -1,11 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller'; // Existente
-import { AppService } from './app.service'; // Existente
-import { MongoDBService } from './database/mongodb.service'; // Nuevo
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { UsersModule } from './users/users.module';
+import { DocentesModule } from './docentes/docentes.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { MongoDBService } from './database/mongodb.service';
 
 @Module({
-  imports: [],
+  imports: [
+    MongooseModule.forRoot(process.env.MONGODB_URI || 'mongodb://localhost:27017/docentes'),
+    UsersModule,
+    DocentesModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, MongoDBService], // Agrega MongoDBService
+  providers: [AppService, MongoDBService],
 })
 export class AppModule {}
