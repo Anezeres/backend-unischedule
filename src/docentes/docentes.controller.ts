@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Put, Patch, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Patch, Delete, Body, Param,} from '@nestjs/common';
 import { DocentesService } from './docentes.service';
 import { Docente } from './schemas/docentes.schema';
-import { CreateDocentesDto} from './dto/create-docentes.dto';
+import { CreateDocentesDto } from './dto/create-docentes.dto';
 import { UpdateDocentesDto } from './dto/update-docentes.dto';
-import {UpdatePartialDocentesDto} from './dto/update-partial-docentes.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { UpdatePartialDocentesDto } from './dto/update-partial-docentes.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody,} from '@nestjs/swagger';
 
 @ApiTags('docentes')
 @Controller('docentes')
@@ -13,7 +13,10 @@ export class DocentesController {
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los docentes' })
-  @ApiResponse({ status: 200, description: 'Lista de docentes obtenida correctamente' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de docentes obtenida correctamente',
+  })
   findAll(): Promise<Docente[]> {
     return this.docentesService.findAll();
   }
@@ -37,22 +40,31 @@ export class DocentesController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Actualizar un docente por ID' })
+  @ApiOperation({ summary: 'Actualizar completamente un docente por ID' })
   @ApiParam({ name: 'id', description: 'ID del docente' })
-  @ApiBody({ type: UpdateDocentesDto })
-  @ApiResponse({ status: 200, description: 'Docente actualizado correctamente' })
+  @ApiBody({ type: UpdateDocentesDto }) // Usa UpdateDocentesDto para PUT
+  @ApiResponse({
+    status: 200,
+    description: 'Docente actualizado correctamente',
+  })
   @ApiResponse({ status: 404, description: 'Docente no encontrado' })
-  update(@Param('id') id: string, @Body() updatePartialDocenteDto: UpdateDocentesDto): Promise<Docente> {
-    return this.docentesService.update(id, updatePartialDocenteDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateDocenteDto: UpdateDocentesDto, // Usa UpdateDocentesDto
+  ): Promise<Docente> {
+    return this.docentesService.update(id, updateDocenteDto);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar parcialmente un docente por ID' })
   @ApiParam({ name: 'id', description: 'ID del docente' })
-  @ApiBody({ type: UpdatePartialDocentesDto })
+  @ApiBody({ type: UpdatePartialDocentesDto }) // Usa UpdatePartialDocentesDto para PATCH
   @ApiResponse({ status: 200, description: 'Docente actualizado parcialmente' })
   @ApiResponse({ status: 404, description: 'Docente no encontrado' })
-  partialUpdate(@Param('id') id: string, @Body() updateDocenteDto: UpdatePartialDocentesDto): Promise<Docente> {
+  partialUpdate(
+    @Param('id') id: string,
+    @Body() updateDocenteDto: UpdatePartialDocentesDto, // Usa UpdatePartialDocentesDto
+  ): Promise<Docente> {
     return this.docentesService.update(id, updateDocenteDto);
   }
 

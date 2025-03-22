@@ -4,6 +4,7 @@ import { Model, isValidObjectId } from 'mongoose';
 import { Docente } from './schemas/docentes.schema';
 import { CreateDocentesDto } from './dto/create-docentes.dto';
 import { UpdateDocentesDto } from './dto/update-docentes.dto';
+import { UpdatePartialDocentesDto } from './dto/update-partial-docentes.dto';
 
 @Injectable()
 export class DocentesService {
@@ -19,7 +20,7 @@ export class DocentesService {
     if (!isValidObjectId(id)) {
       throw new NotFoundException('ID inválido');
     }
-  
+
     const docente = await this.docenteModel.findById(id).exec();
     if (!docente) throw new NotFoundException('Docente no encontrado');
     return docente;
@@ -32,12 +33,12 @@ export class DocentesService {
 
   async update(
     id: string,
-    updateDocenteDto: UpdateDocentesDto,
+    updateDocenteDto: UpdateDocentesDto | UpdatePartialDocentesDto, // Acepta ambos DTOs
   ): Promise<Docente> {
     const docente = await this.docenteModel.findByIdAndUpdate(
       id,
       updateDocenteDto,
-      { new: true },
+      { new: true }, // Devuelve el documento actualizado
     );
     if (!docente) throw new NotFoundException('Docente no encontrado');
     return docente;
